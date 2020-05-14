@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePlayersTable extends Migration
+class CreatePlayerDominoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreatePlayersTable extends Migration
      */
     public function up()
     {
-        Schema::create('players', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('user_id');
-            $table->string('name');
+        Schema::create('player_dominoes', function (Blueprint $table) {
+            $table->bigInteger('player_id');
+            $table->char('current');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreatePlayersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('players');
+        Schema::dropIfExists('player_dominoes');
     }
 }

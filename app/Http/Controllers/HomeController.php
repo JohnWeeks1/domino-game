@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Player;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -38,7 +39,12 @@ class HomeController extends Controller
             'player_names' => 'required',
         ]);
 
-        $request->session()->put('player_names', $request->get('player_names'));
+        foreach ($request->get('player_names') as $player) {
+            Player::create([
+                'user_id' => $request->user()->id,
+                'name' => $player,
+            ]);
+        }
 
         return response()->json(['success' => 'ok', 200]);
     }

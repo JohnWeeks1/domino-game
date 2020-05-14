@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Player;
+use App\PlayerDomino;
 use Illuminate\Http\Request;
 
 class DominoController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +26,10 @@ class DominoController extends Controller
      */
     public function index(Request $request)
     {
+        $players = Player::where('user_id', $request->user()->id)->get();
+
         return view('domino', [
-            'player_names' => $request->session()->get('player_names')
+            'players' => $players
         ]);
     }
 
@@ -29,15 +42,14 @@ class DominoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'id' => 'required',
         ]);
 
-        Player::create([
-            'user_id' => $request->user()->id,
-            'name' => $request->get('name'),
-        ]);
+        $allPlayers = PlayerDomino::where('player_id', $request->get('id'))->pluck('current');
 
-        $request->session()->put('name', $request->get('name'));
+        $player = Player::find($request->get('id'));
+
+        $request->session()->put('player_in_session', $player);
 
         return response()->json(['success' => 'ok', 200]);
     }

@@ -33,3 +33,6 @@ Route::get('/select-dominoes', 'SelectDominoesController@index')
     ->name('select-dominoes');
 Route::post('/select-dominoes', 'SelectDominoesController@store')
     ->name('select-dominoes.store');
+
+Route::get('/game', 'GameController@index')
+    ->name('game');
