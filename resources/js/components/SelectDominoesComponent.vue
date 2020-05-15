@@ -7,10 +7,9 @@
         <div v-if="dominoes.length < 7">
             <h3>{{ player.name }}, click the ones you like the most...</h3>
         </div>
-
         <div v-if="dominoes.length > 0" class="row p-3">
             <div v-for="domino in dominoes" :key="domino">
-                <img class="p-1" :src="`../../../images/dominoes/${domino}.png`" width=40 alt="">
+                <img class="p-1" :src="`../../images/dominoes/${domino}.png`" width=40 alt="">
             </div>
         </div>
 
@@ -19,7 +18,7 @@
         <div v-if="dominoes.length < 7">
             <div class="col-md-12 text-center">
                 <div class="row">
-                    <div v-for="dominoNumber in allDominoNumbers" class="col-3 p-1" :key="dominoNumber">
+                    <div v-for="dominoNumber in availableDominoes" class="col-3 p-1" :key="dominoNumber">
                         <div class="cursor-pointer" @click="playerPicksDominoes(dominoNumber)">
                             <div class="py-3 bg-dark text-white-50 px-1 pointer domino-width">{{ dominoNumber }}</div>
                         </div>
@@ -35,8 +34,8 @@
         name: 'domino.select',
         data() {
             return {
-                allDominoNumbers: [],
-                usedDominoes: [],
+                availableDominoes: [],
+                unavailableDominoes: [],
                 dominoes: [],
                 player: {}
             }
@@ -44,14 +43,23 @@
         mounted() {
             this.numbers();
             this.fetchPlayer();
+            this.fetchAllUnavailableDominoes();
         },
         methods: {
             fetchPlayer() {
-                axios.post('players/'+this.$route.params.id)
+                axios.post('players/'+this.$route.params.player_id)
+                    .then(response => {
+                        this.player = response.data.data;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            },
+            fetchAllUnavailableDominoes() {
+                axios.get('dominoes')
                     .then(response => {
                         console.log(response);
-                        this.player = response.data.player;
-                        this.dominoes = response.data.dominoes;
+                        this.unavailableDominoes = response.data.data;
                     })
                     .catch(error => {
                         console.error(error);
@@ -60,29 +68,34 @@
             playerPicksDominoes(value) {
                 this.dominoes.push(value);
 
-                let index = this.allDominoNumbers.indexOf(value);
-                if (index !== -1) this.allDominoNumbers.splice(index, 1);
+                let index = this.availableDominoes.indexOf(value);
+                if (index !== -1) this.availableDominoes.splice(index, 1);
             },
             numbers() {
                 for (let i = 0; i < 7; i++) {
                     for (let j = 0; j < 7; j++) {
                         if (j > i -1) {
                             let numbers = i + '-' + j;
-                            this.allDominoNumbers.push(numbers);
+                            this.availableDominoes.push(numbers);
                         }
                     }
                 }
-                this.allDominoNumbers = this.allDominoNumbers.filter(val =>
-                    !this.usedDominoes.includes(val)
-                );
+                this.removeUnavailableDominoes();
+            },
+            removeUnavailableDominoes() {
+                setTimeout(() => {
+                    this.availableDominoes = this.availableDominoes.filter(val =>
+                        !this.unavailableDominoes.includes(val)
+                    );
+                }, 300)
             },
             saveSelectedDominoes() {
                 axios.post('/select-dominoes', {
-                    name: this.name,
+                    player_id: this.player.id,
                     dominoes: this.dominoes
                 })
                     .then(() => {
-                        console.log('sdfgh');
+                        this.$router.push({ name: 'domino' });
                     })
                     .catch(error => {
                         console.error(error);

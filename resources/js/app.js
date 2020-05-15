@@ -16,7 +16,7 @@ const routes = [
         component: require('./components/DominoComponent.vue').default
     },
     {
-        path: '/select-dominoes/:id',
+        path: '/select-dominoes/:player_id',
         name: 'domino.select',
         component: require('./components/SelectDominoesComponent.vue').default
     },

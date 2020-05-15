@@ -2161,13 +2161,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'domino.select',
   data: function data() {
     return {
-      allDominoNumbers: [],
-      usedDominoes: [],
+      availableDominoes: [],
+      unavailableDominoes: [],
       dominoes: [],
       player: {}
     };
@@ -2175,46 +2174,64 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.numbers();
     this.fetchPlayer();
+    this.fetchAllUnavailableDominoes();
   },
   methods: {
     fetchPlayer: function fetchPlayer() {
       var _this = this;
 
-      axios.post('players/' + this.$route.params.id).then(function (response) {
+      axios.post('players/' + this.$route.params.player_id).then(function (response) {
+        _this.player = response.data.data;
+      })["catch"](function (error) {
+        console.error(error);
+      });
+    },
+    fetchAllUnavailableDominoes: function fetchAllUnavailableDominoes() {
+      var _this2 = this;
+
+      axios.get('dominoes').then(function (response) {
         console.log(response);
-        _this.player = response.data.player;
-        _this.dominoes = response.data.dominoes;
+        _this2.unavailableDominoes = response.data.data;
       })["catch"](function (error) {
         console.error(error);
       });
     },
     playerPicksDominoes: function playerPicksDominoes(value) {
       this.dominoes.push(value);
-      var index = this.allDominoNumbers.indexOf(value);
-      if (index !== -1) this.allDominoNumbers.splice(index, 1);
+      var index = this.availableDominoes.indexOf(value);
+      if (index !== -1) this.availableDominoes.splice(index, 1);
     },
     numbers: function numbers() {
-      var _this2 = this;
-
       for (var i = 0; i < 7; i++) {
         for (var j = 0; j < 7; j++) {
           if (j > i - 1) {
             var numbers = i + '-' + j;
-            this.allDominoNumbers.push(numbers);
+            this.availableDominoes.push(numbers);
           }
         }
       }
 
-      this.allDominoNumbers = this.allDominoNumbers.filter(function (val) {
-        return !_this2.usedDominoes.includes(val);
-      });
+      this.removeUnavailableDominoes();
+    },
+    removeUnavailableDominoes: function removeUnavailableDominoes() {
+      var _this3 = this;
+
+      setTimeout(function () {
+        _this3.availableDominoes = _this3.availableDominoes.filter(function (val) {
+          return !_this3.unavailableDominoes.includes(val);
+        });
+      }, 300);
     },
     saveSelectedDominoes: function saveSelectedDominoes() {
+      var _this4 = this;
+
       axios.post('/select-dominoes', {
-        name: this.name,
+        player_id: this.player.id,
         dominoes: this.dominoes
       }).then(function () {
-        console.log('sdfgh');
+        _this4.$router.push({
+          name: 'domino'
+        });
       })["catch"](function (error) {
         console.error(error);
       });
@@ -55486,27 +55503,42 @@ var render = function() {
               { key: index, staticClass: "list-group-item" },
               [
                 _vm._v(
-                  "\n                        " +
+                  "\n                    " +
                     _vm._s(++index) +
                     ". " +
                     _vm._s(player.name) +
-                    "\n"
+                    "\n                    "
                 ),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-primary btn-sm float-right",
-                    attrs: {
-                      to: { name: "domino.select", params: { id: player.id } }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                            Select dominoes\n                        "
+                player.dominoes.length > 0
+                  ? _c(
+                      "span",
+                      {
+                        staticClass: "bg-success float-right p-1 text-light",
+                        attrs: { role: "alert" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        You're ready to play\n                    "
+                        )
+                      ]
                     )
-                  ]
-                )
+                  : _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-primary btn-sm float-right",
+                        attrs: {
+                          to: {
+                            name: "domino.select",
+                            params: { player_id: player.id }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Select dominoes\n                    "
+                        )
+                      ]
+                    )
               ],
               1
             )
@@ -55798,7 +55830,7 @@ var render = function() {
               _c("img", {
                 staticClass: "p-1",
                 attrs: {
-                  src: "../../../images/dominoes/" + domino + ".png",
+                  src: "../../images/dominoes/" + domino + ".png",
                   width: "40",
                   alt: ""
                 }
@@ -55817,7 +55849,7 @@ var render = function() {
             _c(
               "div",
               { staticClass: "row" },
-              _vm._l(_vm.allDominoNumbers, function(dominoNumber) {
+              _vm._l(_vm.availableDominoes, function(dominoNumber) {
                 return _c(
                   "div",
                   { key: dominoNumber, staticClass: "col-3 p-1" },
@@ -70976,7 +71008,7 @@ var routes = [{
   name: 'domino',
   component: __webpack_require__(/*! ./components/DominoComponent.vue */ "./resources/js/components/DominoComponent.vue")["default"]
 }, {
-  path: '/select-dominoes/:id',
+  path: '/select-dominoes/:player_id',
   name: 'domino.select',
   component: __webpack_require__(/*! ./components/SelectDominoesComponent.vue */ "./resources/js/components/SelectDominoesComponent.vue")["default"]
 }, {

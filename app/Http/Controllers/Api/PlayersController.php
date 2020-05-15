@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Player;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PlayerResource;
 use App\Http\Resources\PlayersCollection;
 
 class PlayersController extends Controller
@@ -42,19 +43,15 @@ class PlayersController extends Controller
     }
 
     /**
-     * Show player by id.
+     * Show player by player_id.
      *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param $player_id
+     * @return PlayerResource
      */
-    public function show(Request $request, $id)
+    public function show($player_id)
     {
-        $player = Player::findOrFail($id);
-
-        return response()->json([
-            'player' => $player,
-            'dominoes' => $player->dominoes->pluck('current')
-        ]);
+        return new PlayerResource(
+            Player::where('id', $player_id)->first()
+        );
     }
 }

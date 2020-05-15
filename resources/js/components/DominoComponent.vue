@@ -8,11 +8,11 @@
                 <ul  class="list-group">
                     <li v-for="(player, index) in players" :key="index" class="list-group-item">
                         {{ ++index }}. {{ player.name }}
-<!--                        <span v-if="player.dominoes !== null" class="bg-success float-right p-1 text-light" role="alert">-->
-<!--                            You're ready to play-->
-<!--                        </span>-->
-                        <router-link
-                            :to="{ name: 'domino.select', params: { id: player.id } }"
+                        <span v-if="player.dominoes.length > 0" class="bg-success float-right p-1 text-light" role="alert">
+                            You're ready to play
+                        </span>
+                        <router-link v-else
+                            :to="{ name: 'domino.select', params: { player_id: player.id } }"
                             class="btn btn-primary btn-sm float-right">
                             Select dominoes
                         </router-link>

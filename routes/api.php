@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,14 +20,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/players', 'Api\PlayersController@store')
         ->name('players.store');
 
-    Route::post('/players/{id}', 'Api\PlayersController@show')
+    Route::post('/players/{player_id}', 'Api\PlayersController@show')
         ->name('players.show');
 
+    Route::get('/dominoes', 'Api\DominoesController@index')
+        ->name('dominoes.index');
 
-    Route::post('/domino', 'Api\DominoController@store')
-        ->name('domino.store');
-
-    Route::post('/select-dominoes/{id}', 'Api\SelectDominoesController@show')
+    Route::post('/select-dominoes/{player_id}', 'Api\SelectDominoesController@show')
         ->name('select-dominoes.show');
 
     Route::post('/select-dominoes', 'Api\SelectDominoesController@store')

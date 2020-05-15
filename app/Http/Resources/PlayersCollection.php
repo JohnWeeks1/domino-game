@@ -14,10 +14,6 @@ class PlayersCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return [
-            'data' => $this->collection->filter(function($player) {
-                return new PlayerIndexResource($player);
-            }),
-        ];
+        return parent::toArray($request);
     }
 }
