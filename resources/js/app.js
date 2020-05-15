@@ -8,21 +8,23 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/home',
-        component: require('./components/PlayersComponent.vue').default
+        name: 'home',
+        component: require('./components/AddPlayersComponent.vue').default
     },
     {
-        path: '/domino',
-        name: 'domino',
-        component: require('./components/DominoComponent.vue').default
+        path: '/player-list',
+        name: 'player-list',
+        component: require('./components/PlayerListComponent.vue').default
     },
     {
         path: '/select-dominoes/:player_id',
-        name: 'domino.select',
+        name: 'select-dominoes',
         component: require('./components/SelectDominoesComponent.vue').default
     },
     {
-        path: '/game', component:
-        require('./components/GameComponent.vue').default
+        path: '/game',
+        name: 'game',
+        component: require('./components/GameComponent.vue').default
     }
 ];
 

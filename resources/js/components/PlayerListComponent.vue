@@ -2,6 +2,11 @@
     <div class="container">
         <h3>Let's do this!</h3>
         <p>Click on the button and select 7 Dominoes</p>
+        <router-link
+                     :to="{ name: 'game' }"
+                     class="btn btn-primary btn-sm float-right">
+            Select dominoes
+        </router-link>
         <hr>
         <div class="row">
             <div class="col-md-12">
@@ -12,7 +17,7 @@
                             You're ready to play
                         </span>
                         <router-link v-else
-                            :to="{ name: 'domino.select', params: { player_id: player.id } }"
+                            :to="{ name: 'select-dominoes', params: { player_id: player.id } }"
                             class="btn btn-primary btn-sm float-right">
                             Select dominoes
                         </router-link>
@@ -25,7 +30,7 @@
 
 <script>
     export default {
-        name: 'domino',
+        name: 'player-list',
         data() {
             return {
                 players: []

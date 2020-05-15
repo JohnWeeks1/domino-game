@@ -52,7 +52,7 @@
 
 <script>
     export default {
-        name: 'players',
+        name: 'home',
         data() {
             return {
                 errorMessage: null,
@@ -74,7 +74,7 @@
                     player_names: this.playerNames
                 })
                     .then(response => {
-                        this.$router.push({ name: 'domino'})
+                        this.$router.push({ name: 'player-list'})
                     })
                     .catch(error => {
                         console.error(error);

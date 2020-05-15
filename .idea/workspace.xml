@@ -2,21 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53c9c968-25a6-4656-bfae-e9c6d2c487ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DominoesController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DominoController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SelectDominoesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SelectDominoesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/PlayerIndexResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/PlayerResource.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/PlayersCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/PlayersCollection.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/PlayersDominoesCollection.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_05_12_234250_create_players_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_05_12_234250_create_players_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_05_14_001101_create_player_dominoes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_05_14_001101_create_player_dominoes_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/DominoComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/DominoComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/DominoComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/PlayerListComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/PlayersComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/AddPlayersComponent.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/SelectDominoesComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/SelectDominoesComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -217,17 +210,17 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="190" y="384" key="com.intellij.ide.util.TipDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1589567365911" />
-    <state x="131" y="276" width="782" height="710" key="find.popup" timestamp="1589577572191">
+    <state x="131" y="276" width="782" height="710" key="find.popup" timestamp="1589582984774">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="131" y="276" width="782" height="710" key="find.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1589577572191" />
+    <state x="131" y="276" width="782" height="710" key="find.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1589582984774" />
     <state x="162" y="258" key="run.anything.popup" timestamp="1589492411766">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="162" y="258" key="run.anything.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1589492411766" />
-    <state x="166" y="263" width="670" height="676" key="search.everywhere.popup" timestamp="1589569733844">
+    <state x="166" y="263" width="670" height="676" key="search.everywhere.popup" timestamp="1589580450905">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="166" y="263" width="670" height="676" key="search.everywhere.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1589569733844" />
+    <state x="166" y="263" width="670" height="676" key="search.everywhere.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1589580450905" />
   </component>
 </project>

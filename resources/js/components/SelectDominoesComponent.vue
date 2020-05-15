@@ -31,7 +31,7 @@
 
 <script>
     export default {
-        name: 'domino.select',
+        name: 'select-dominoes',
         data() {
             return {
                 availableDominoes: [],
@@ -44,6 +44,8 @@
             this.numbers();
             this.fetchPlayer();
             this.fetchAllUnavailableDominoes();
+
+
         },
         methods: {
             fetchPlayer() {
@@ -58,7 +60,6 @@
             fetchAllUnavailableDominoes() {
                 axios.get('dominoes')
                     .then(response => {
-                        console.log(response);
                         this.unavailableDominoes = response.data.data;
                     })
                     .catch(error => {
@@ -87,7 +88,7 @@
                     this.availableDominoes = this.availableDominoes.filter(val =>
                         !this.unavailableDominoes.includes(val)
                     );
-                }, 300)
+                }, 200)
             },
             saveSelectedDominoes() {
                 axios.post('/select-dominoes', {
@@ -95,7 +96,7 @@
                     dominoes: this.dominoes
                 })
                     .then(() => {
-                        this.$router.push({ name: 'domino' });
+                        this.$router.push({ name: 'player-list' });
                     })
                     .catch(error => {
                         console.error(error);

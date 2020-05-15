@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
 Route::get('{any}', function () {
     return view('home');
 })->where('any','.*');
