@@ -19,20 +19,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')
-    ->name('home');
-Route::post('/home', 'HomeController@store')
-    ->name('home.store');
-
-Route::get('/domino', 'DominoController@index')
-    ->name('domino');
-Route::post('/domino', 'DominoController@store')
-    ->name('domino.store');
-
-Route::get('/select-dominoes', 'SelectDominoesController@index')
-    ->name('select-dominoes');
-Route::post('/select-dominoes', 'SelectDominoesController@store')
-    ->name('select-dominoes.store');
-
-Route::get('/game', 'GameController@index')
-    ->name('game');
+//Route::get('{any}', function () {
+//    return view('home');
+//})->where('any','.*');

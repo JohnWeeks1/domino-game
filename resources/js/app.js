@@ -1,12 +1,37 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import VueRouter from 'vue-router'
 
-Vue.component('domino-component', require('./components/DominoComponent.vue').default);
-Vue.component('select-dominoes-component', require('./components/SelectDominoesComponent.vue').default);
-Vue.component('players-component', require('./components/PlayersComponent.vue').default);
-Vue.component('game-component', require('./components/GameComponent.vue').default);
+Vue.use(VueRouter);
+
+const routes = [
+    {
+        path: '/home', component:
+        require('./components/PlayersComponent.vue').default
+    },
+    {
+        path: '/domino',
+        name: 'domino',
+        component: require('./components/DominoComponent.vue').default
+    },
+    {
+        path: '/select-dominoes/:id',
+        name: 'domino.select',
+        component: require('./components/SelectDominoesComponent.vue').default
+    },
+    {
+        path: '/game', component:
+        require('./components/GameComponent.vue').default
+    }
+];
+
+const router = new VueRouter({
+    mode: 'history',
+    routes
+});
 
 const app = new Vue({
     el: '#app',
+    router
 });

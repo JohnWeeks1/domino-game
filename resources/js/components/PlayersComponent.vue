@@ -70,14 +70,11 @@
                 this.errorMessage = null;
             },
             playGame() {
-                axios.post('home', {
+                axios.post('players', {
                     player_names: this.playerNames
                 })
                     .then(response => {
-                        console.log(response);
-                        if (response.status === 200) {
-                            window.location.href = '/domino'
-                        }
+                        this.$router.push({ name: 'domino'})
                     })
                     .catch(error => {
                         console.error(error);

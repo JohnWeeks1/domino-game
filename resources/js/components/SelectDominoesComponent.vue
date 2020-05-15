@@ -5,11 +5,12 @@
             <button @click="saveSelectedDominoes" v-if="dominoes.length > 6" class="btn btn-primary btn-sm ">Submit selection</button>
         </div>
         <div v-if="dominoes.length < 7">
-            <h3>{{ playerInSession.name }}, click the ones you like the most...</h3>
+            <h3>{{ player.name }}, click the ones you like the most...</h3>
         </div>
+
         <div v-if="dominoes.length > 0" class="row p-3">
             <div v-for="domino in dominoes" :key="domino">
-                <img class="p-1" :src="`images/dominoes/${domino}.png`" width=40 alt="">
+                <img class="p-1" :src="`../../../images/dominoes/${domino}.png`" width=40 alt="">
             </div>
         </div>
 
@@ -31,27 +32,31 @@
 
 <script>
     export default {
-        name: 'domino',
+        name: 'domino.select',
         data() {
             return {
                 allDominoNumbers: [],
-                dominoes: []
+                usedDominoes: [],
+                dominoes: [],
+                player: {}
             }
         },
         mounted() {
             this.numbers();
-        },
-        props: {
-            playerInSession: {
-                type: Object,
-                required: true
-            },
-            usedDominoes: {
-                type: Array,
-                required: false
-            }
+            this.fetchPlayer();
         },
         methods: {
+            fetchPlayer() {
+                axios.post('players/'+this.$route.params.id)
+                    .then(response => {
+                        console.log(response);
+                        this.player = response.data.player;
+                        this.dominoes = response.data.dominoes;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            },
             playerPicksDominoes(value) {
                 this.dominoes.push(value);
 
@@ -77,7 +82,7 @@
                     dominoes: this.dominoes
                 })
                     .then(() => {
-                        window.location.href = '/domino';
+                        console.log('sdfgh');
                     })
                     .catch(error => {
                         console.error(error);

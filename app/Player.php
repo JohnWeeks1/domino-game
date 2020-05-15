@@ -10,6 +10,6 @@ class Player extends Model
 
     public function dominoes()
     {
-        return $this->hasMany('App\PlayerDomino', 'player_id', 'user_id');
+        return $this->hasMany('App\PlayerDomino', 'player_id', 'id');
     }
 }
