@@ -7,8 +7,8 @@ Vue.use(VueRouter);
 
 const routes = [
     {
-        path: '/home', component:
-        require('./components/PlayersComponent.vue').default
+        path: '/home',
+        component: require('./components/PlayersComponent.vue').default
     },
     {
         path: '/domino',

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <players-component/>
+    <router-view></router-view>
 @endsection
