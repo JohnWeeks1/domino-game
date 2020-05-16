@@ -2040,19 +2040,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'game',
   data: function data() {
     return {
-      layout: [{
-        "x": 6,
-        "y": 10,
-        "w": 2,
-        "h": 2,
-        "i": "4-4"
-      }]
+      players: [],
+      layout: []
     };
+  },
+  mounted: function mounted() {
+    this.fetchPlayers();
+  },
+  methods: {
+    addDominoToGameArea: function addDominoToGameArea(name, domino) {
+      this.layout.push({
+        "name": name,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 2,
+        "i": domino
+      });
+    },
+    rotateLeft: function rotateLeft() {
+      this.rotation += 90;
+    },
+    fetchPlayers: function fetchPlayers() {
+      var _this = this;
+
+      axios.get('players').then(function (response) {
+        _this.players = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   },
   components: {
     GridLayout: vue_grid_layout__WEBPACK_IMPORTED_MODULE_0___default.a.GridLayout,
@@ -55644,18 +55677,72 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container" },
     [
+      _c("div", { staticClass: "container" }, [
+        _c(
+          "div",
+          { staticClass: "jumbotron" },
+          _vm._l(_vm.players, function(player) {
+            return _c(
+              "div",
+              { key: _vm.players.id },
+              [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(player.name) +
+                    "\n                "
+                ),
+                _vm._l(player.dominoes, function(domino) {
+                  return _c("span", [
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          dblclick: function($event) {
+                            return _vm.addDominoToGameArea(
+                              player.name,
+                              domino.current
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("img", {
+                          staticClass: "p-1",
+                          attrs: {
+                            src:
+                              "../../images/dominoes/" +
+                              domino.current +
+                              ".png",
+                            width: "40",
+                            alt: ""
+                          }
+                        })
+                      ]
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
       _c(
         "grid-layout",
         {
-          staticClass: "bg-success",
+          staticStyle: {
+            margin: "0 auto",
+            "max-width": "1000px !important",
+            "min-width": "940px !important"
+          },
           attrs: {
-            width: "100",
             "prevent-collision": true,
             layout: _vm.layout,
-            "col-num": 12,
-            "row-height": 30,
+            "col-num": 20,
+            "row-height": 45,
             "is-draggable": true,
             "is-resizable": false,
             "is-mirrored": false,
@@ -55669,17 +55756,19 @@ var render = function() {
             "grid-item",
             {
               key: item.i,
-              staticClass: "bg-dark",
               attrs: { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }
             },
             [
-              _c("img", {
-                attrs: {
-                  src: "images/dominoes/" + item.i + ".png",
-                  height: "100px",
-                  alt: ""
-                }
-              })
+              _c("div", { on: { dblclick: function($event) {} } }, [
+                _c("img", {
+                  staticClass: "img-fluid",
+                  attrs: {
+                    src: "images/dominoes/" + item.i + ".png",
+                    height: "100px",
+                    alt: ""
+                  }
+                })
+              ])
             ]
           )
         }),

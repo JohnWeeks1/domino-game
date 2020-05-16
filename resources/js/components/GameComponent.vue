@@ -1,12 +1,23 @@
 <template>
-    <div class="container">
+    <div>
+        <div class="container">
+            <div class="jumbotron">
+                <div v-for="player in players" :key="players.id">
+                    {{player.name}}
+                    <span v-for="domino in player.dominoes">
+                        <span @dblclick="addDominoToGameArea(player.name, domino.current)">
+                            <img class="p-1" :src="`../../images/dominoes/${domino.current}.png`" width=40 alt="">
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
         <grid-layout
-            class="bg-success"
-            width=100
+            style="margin: 0 auto; max-width: 1000px !important; min-width: 940px !important;"
             :prevent-collision="true"
             :layout="layout"
-            :col-num="12"
-            :row-height="30"
+            :col-num="20"
+            :row-height="45"
             :is-draggable="true"
             :is-resizable="false"
             :is-mirrored="false"
@@ -15,7 +26,6 @@
             :use-css-transforms="false"
         >
             <grid-item v-for="item in layout"
-                       class="bg-dark"
                        :x="item.x"
                        :y="item.y"
                        :w="item.w"
@@ -23,8 +33,9 @@
                        :i="item.i"
                        :key="item.i">
 
-                    <img class="" :src="`images/dominoes/${item.i}.png`"  height='100px' alt="">
-<!--                {{item.i}}-->
+                <div @dblclick="">
+                    <img class="img-fluid" :src="`images/dominoes/${item.i}.png`"  height='100px' alt="">
+                </div>
             </grid-item>
         </grid-layout>
     </div>
@@ -32,14 +43,41 @@
 
 <script>
     import VueGridLayout from 'vue-grid-layout';
+
     export default {
         name: 'game',
         data() {
             return {
-                layout: [
-                    {"x":6,"y":10,"w":2,"h":2,"i":"4-4"},
-                ]
+                players: [],
+                layout: []
             }
+        },
+        mounted() {
+            this.fetchPlayers();
+        },
+        methods: {
+            addDominoToGameArea(name, domino) {
+                this.layout.push({
+                    "name":name,
+                    "x":0,
+                    "y":0,
+                    "w":1,
+                    "h":2,
+                    "i":domino
+                });
+            },
+            rotateLeft() {
+                this.rotation += 90
+            },
+            fetchPlayers() {
+                axios.get('players')
+                    .then(response => {
+                        this.players = response.data.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
         },
         components: {
             GridLayout: VueGridLayout.GridLayout,

@@ -31,4 +31,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('/select-dominoes', 'Api\SelectDominoesController@store')
         ->name('select-dominoes.store');
+
+    Route::get('/game', 'Api\PlayersByLoggedInUserController@index')
+        ->name('game.index');
 });
