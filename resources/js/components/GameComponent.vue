@@ -22,7 +22,7 @@
             :is-resizable="false"
             :is-mirrored="false"
             :vertical-compact="false"
-            :margin="[2, 2]"
+            :margin="[0, 3]"
             :use-css-transforms="false"
         >
             <grid-item v-for="item in layout"
@@ -32,8 +32,7 @@
                        :h="item.h"
                        :i="item.i"
                        :key="item.i">
-
-                    <img @dblclick="rotateLeft(item.i)" class="img-fluid" :id="`rotateDomino${item.i}`" :src="`images/dominoes/${item.i}.png`"  alt="">
+                    <img height="95px" @dblclick="rotateLeft(item.i)" :id="`rotateDomino${item.i}`" :src="`images/dominoes/${item.i}.png`"  alt="">
             </grid-item>
         </grid-layout>
     </div>
@@ -47,7 +46,9 @@
         data() {
             return {
                 players: [],
+                playersRow: 0,
                 layout: [],
+                currentNameAndDomino: [],
                 rotateAngle: 90,
                 currentRotationPosition: 0
             }
@@ -57,6 +58,7 @@
         },
         methods: {
             addDominoToGameArea(player, domino) {
+                this.currentNameAndDomino = [player.name, domino];
                 this.layout.push({
                     "name":player.name,
                     "x":0,
@@ -78,9 +80,42 @@
                 if (this.currentRotationPosition > 270) {
                     this.currentRotationPosition = 0;
                 }
+                let dominoBeingClicked = document.getElementById("rotateDomino" + number)
 
-                document.getElementById("rotateDomino" + number)
-                    .style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) +'deg)';
+                dominoBeingClicked.style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) +'deg)';
+                
+                for (let i = 0; i < this.layout.length; i++) {
+                    let layout = this.layout[i];
+                    
+                    if (
+                        layout.name === this.currentNameAndDomino[0] &&
+                        layout.i === this.currentNameAndDomino[1]
+                    ) {
+                        if (this.currentRotationPosition === 90) {
+                            dominoBeingClicked.classList.add('moveDominoToCorrectArea');
+                            layout.h = 1;
+                            layout.w = 2; 
+                        }
+
+                        if (this.currentRotationPosition === 180) {
+                            dominoBeingClicked.classList.remove('moveDominoToCorrectArea');
+                            layout.h = 2;
+                            layout.w = 1;
+                        }
+
+                        if (this.currentRotationPosition === 270) {
+                            dominoBeingClicked.classList.add('moveDominoToCorrectArea');
+                            layout.h = 1;
+                            layout.w = 2; 
+                        }
+
+                        if (this.currentRotationPosition === 360) {
+                            dominoBeingClicked.classList.remove('moveDominoToCorrectArea');
+                            layout.h = 2;
+                            layout.w = 1;
+                        }
+                    }
+                }
             },
             fetchPlayers() {
                 axios.get('players')
@@ -101,4 +136,9 @@
 
 <style>
     #rotateDomino {}
+
+    .moveDominoToCorrectArea {
+        margin-left: 24px;
+        margin-top: -24px;
+    }
 </style>

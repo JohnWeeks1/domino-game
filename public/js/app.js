@@ -2048,14 +2048,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'game',
   data: function data() {
     return {
       players: [],
+      playersRow: 0,
       layout: [],
+      currentNameAndDomino: [],
       rotateAngle: 90,
       currentRotationPosition: 0
     };
@@ -2065,6 +2066,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     addDominoToGameArea: function addDominoToGameArea(player, domino) {
+      this.currentNameAndDomino = [player.name, domino];
       this.layout.push({
         "name": player.name,
         "x": 0,
@@ -2086,7 +2088,38 @@ __webpack_require__.r(__webpack_exports__);
         this.currentRotationPosition = 0;
       }
 
-      document.getElementById("rotateDomino" + number).style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) + 'deg)';
+      var dominoBeingClicked = document.getElementById("rotateDomino" + number);
+      dominoBeingClicked.style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) + 'deg)';
+
+      for (var i = 0; i < this.layout.length; i++) {
+        var layout = this.layout[i];
+
+        if (layout.name === this.currentNameAndDomino[0] && layout.i === this.currentNameAndDomino[1]) {
+          if (this.currentRotationPosition === 90) {
+            dominoBeingClicked.classList.add('moveDominoToCorrectArea');
+            layout.h = 1;
+            layout.w = 2;
+          }
+
+          if (this.currentRotationPosition === 180) {
+            dominoBeingClicked.classList.remove('moveDominoToCorrectArea');
+            layout.h = 2;
+            layout.w = 1;
+          }
+
+          if (this.currentRotationPosition === 270) {
+            dominoBeingClicked.classList.add('moveDominoToCorrectArea');
+            layout.h = 1;
+            layout.w = 2;
+          }
+
+          if (this.currentRotationPosition === 360) {
+            dominoBeingClicked.classList.remove('moveDominoToCorrectArea');
+            layout.h = 2;
+            layout.w = 1;
+          }
+        }
+      }
     },
     fetchPlayers: function fetchPlayers() {
       var _this = this;
@@ -6733,7 +6766,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#rotateDomino {}\n", ""]);
+exports.push([module.i, "\n#rotateDomino {}\n.moveDominoToCorrectArea {\n    margin-left: 24px;\n    margin-top: -24px;\n}\n", ""]);
 
 // exports
 
@@ -55803,7 +55836,7 @@ var render = function() {
             "is-resizable": false,
             "is-mirrored": false,
             "vertical-compact": false,
-            margin: [2, 2],
+            margin: [0, 3],
             "use-css-transforms": false
           }
         },
@@ -55816,8 +55849,8 @@ var render = function() {
             },
             [
               _c("img", {
-                staticClass: "img-fluid",
                 attrs: {
+                  height: "95px",
                   id: "rotateDomino" + item.i,
                   src: "images/dominoes/" + item.i + ".png",
                   alt: ""

@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="53c9c968-25a6-4656-bfae-e9c6d2c487ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/PlayersCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/PlayersCollection.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/GameComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/GameComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/PlayerListComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/PlayerListComponent.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +179,7 @@
       <updated>1589299380606</updated>
       <workItem from="1589299383366" duration="75007000" />
       <workItem from="1589567365352" duration="11741000" />
-      <workItem from="1589621301475" duration="14537000" />
+      <workItem from="1589621301475" duration="16247000" />
     </task>
     <servers />
   </component>
