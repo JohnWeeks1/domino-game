@@ -2049,33 +2049,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'game',
   data: function data() {
     return {
       players: [],
-      layout: []
+      layout: [],
+      rotateAngle: 90,
+      currentRotationPosition: 0
     };
   },
   mounted: function mounted() {
     this.fetchPlayers();
   },
   methods: {
-    addDominoToGameArea: function addDominoToGameArea(name, domino) {
+    addDominoToGameArea: function addDominoToGameArea(player, domino) {
       this.layout.push({
-        "name": name,
+        "name": player.name,
         "x": 0,
         "y": 0,
         "w": 1,
         "h": 2,
         "i": domino
       });
+      this.removeUsedDominoFromSelection(domino);
     },
-    rotateLeft: function rotateLeft() {
-      this.rotation += 90;
+    removeUsedDominoFromSelection: function removeUsedDominoFromSelection(domino) {
+      for (var i = 0; i < this.players.length; i++) {
+        var index = this.players[i].dominoes.indexOf(domino);
+        if (index !== -1) this.players[i].dominoes.splice(index, 1);
+      }
+    },
+    rotateLeft: function rotateLeft(number) {
+      if (this.currentRotationPosition > 270) {
+        this.currentRotationPosition = 0;
+      }
+
+      document.getElementById("rotateDomino" + number).style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) + 'deg)';
     },
     fetchPlayers: function fetchPlayers() {
       var _this = this;
@@ -2104,6 +2115,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -6704,6 +6717,25 @@ __webpack_require__.r(__webpack_exports__);
 
 })));
 //# sourceMappingURL=bootstrap.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#rotateDomino {}\n", ""]);
+
+// exports
 
 
 /***/ }),
@@ -37837,6 +37869,36 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./GameComponent.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SelectDominoesComponent.vue?vue&type=style&index=0&id=20b813d0&scoped=true&lang=css&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SelectDominoesComponent.vue?vue&type=style&index=0&id=20b813d0&scoped=true&lang=css& ***!
@@ -55699,10 +55761,7 @@ var render = function() {
                       {
                         on: {
                           dblclick: function($event) {
-                            return _vm.addDominoToGameArea(
-                              player.name,
-                              domino.current
-                            )
+                            return _vm.addDominoToGameArea(player, domino)
                           }
                         }
                       },
@@ -55710,10 +55769,7 @@ var render = function() {
                         _c("img", {
                           staticClass: "p-1",
                           attrs: {
-                            src:
-                              "../../images/dominoes/" +
-                              domino.current +
-                              ".png",
+                            src: "../../images/dominoes/" + domino + ".png",
                             width: "40",
                             alt: ""
                           }
@@ -55759,16 +55815,19 @@ var render = function() {
               attrs: { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }
             },
             [
-              _c("div", { on: { dblclick: function($event) {} } }, [
-                _c("img", {
-                  staticClass: "img-fluid",
-                  attrs: {
-                    src: "images/dominoes/" + item.i + ".png",
-                    height: "100px",
-                    alt: ""
+              _c("img", {
+                staticClass: "img-fluid",
+                attrs: {
+                  id: "rotateDomino" + item.i,
+                  src: "images/dominoes/" + item.i + ".png",
+                  alt: ""
+                },
+                on: {
+                  dblclick: function($event) {
+                    return _vm.rotateLeft(item.i)
                   }
-                })
-              ])
+                }
+              })
             ]
           )
         }),
@@ -55800,83 +55859,69 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container" },
-    [
-      _c("h3", [_vm._v("Let's do this!")]),
-      _vm._v(" "),
-      _c("p", [_vm._v("Click on the button and select 7 Dominoes")]),
-      _vm._v(" "),
-      _c(
-        "router-link",
-        {
-          staticClass: "btn btn-primary btn-sm float-right",
-          attrs: { to: { name: "game" } }
-        },
-        [_vm._v("\n        Select dominoes\n    ")]
-      ),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12" }, [
-          _c(
-            "ul",
-            { staticClass: "list-group" },
-            _vm._l(_vm.players, function(player, index) {
-              return _c(
-                "li",
-                { key: index, staticClass: "list-group-item" },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(++index) +
-                      ". " +
-                      _vm._s(player.name) +
-                      "\n                    "
-                  ),
-                  player.dominoes.length > 0
-                    ? _c(
-                        "span",
-                        {
-                          staticClass: "bg-success float-right p-1 text-light",
-                          attrs: { role: "alert" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        You're ready to play\n                    "
-                          )
-                        ]
-                      )
-                    : _c(
-                        "router-link",
-                        {
-                          staticClass: "btn btn-primary btn-sm float-right",
-                          attrs: {
-                            to: {
-                              name: "select-dominoes",
-                              params: { player_id: player.id }
-                            }
+  return _c("div", { staticClass: "container" }, [
+    _c("h3", [_vm._v("Let's do this!")]),
+    _vm._v(" "),
+    _c("p", [_vm._v("Click on the button and select 7 Dominoes")]),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c(
+          "ul",
+          { staticClass: "list-group" },
+          _vm._l(_vm.players, function(player, index) {
+            return _c(
+              "li",
+              { key: index, staticClass: "list-group-item" },
+              [
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(++index) +
+                    ". " +
+                    _vm._s(player.name) +
+                    "\n                        "
+                ),
+                player.dominoes.length > 0
+                  ? _c(
+                      "span",
+                      {
+                        staticClass: "bg-success float-right p-1 text-light",
+                        attrs: { role: "alert" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            You're ready to play\n                        "
+                        )
+                      ]
+                    )
+                  : _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-primary btn-sm float-right",
+                        attrs: {
+                          to: {
+                            name: "select-dominoes",
+                            params: { player_id: player.id }
                           }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Select dominoes\n                    "
-                          )
-                        ]
-                      )
-                ],
-                1
-              )
-            }),
-            0
-          )
-        ])
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Select dominoes\n                        "
+                        )
+                      ]
+                    )
+              ],
+              1
+            )
+          }),
+          0
+        )
       ])
-    ],
-    1
-  )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -71261,7 +71306,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _GameComponent_vue_vue_type_template_id_5cec6160___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GameComponent.vue?vue&type=template&id=5cec6160& */ "./resources/js/components/GameComponent.vue?vue&type=template&id=5cec6160&");
 /* harmony import */ var _GameComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GameComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/GameComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GameComponent.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -71269,7 +71316,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _GameComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _GameComponent_vue_vue_type_template_id_5cec6160___WEBPACK_IMPORTED_MODULE_0__["render"],
   _GameComponent_vue_vue_type_template_id_5cec6160___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -71298,6 +71345,22 @@ component.options.__file = "resources/js/components/GameComponent.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./GameComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GameComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./GameComponent.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GameComponent.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GameComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 

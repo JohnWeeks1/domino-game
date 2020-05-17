@@ -5,14 +5,14 @@
                 <div v-for="player in players" :key="players.id">
                     {{player.name}}
                     <span v-for="domino in player.dominoes">
-                        <span @dblclick="addDominoToGameArea(player.name, domino.current)">
-                            <img class="p-1" :src="`../../images/dominoes/${domino.current}.png`" width=40 alt="">
+                        <span @dblclick="addDominoToGameArea(player, domino)">
+                            <img class="p-1" :src="`../../images/dominoes/${domino}.png`" width=40 alt="">
                         </span>
                     </span>
                 </div>
             </div>
         </div>
-        <grid-layout
+       <grid-layout
             style="margin: 0 auto; max-width: 1000px !important; min-width: 940px !important;"
             :prevent-collision="true"
             :layout="layout"
@@ -33,9 +33,7 @@
                        :i="item.i"
                        :key="item.i">
 
-                <div @dblclick="">
-                    <img class="img-fluid" :src="`images/dominoes/${item.i}.png`"  height='100px' alt="">
-                </div>
+                    <img @dblclick="rotateLeft(item.i)" class="img-fluid" :id="`rotateDomino${item.i}`" :src="`images/dominoes/${item.i}.png`"  alt="">
             </grid-item>
         </grid-layout>
     </div>
@@ -49,25 +47,40 @@
         data() {
             return {
                 players: [],
-                layout: []
+                layout: [],
+                rotateAngle: 90,
+                currentRotationPosition: 0
             }
         },
         mounted() {
             this.fetchPlayers();
         },
         methods: {
-            addDominoToGameArea(name, domino) {
+            addDominoToGameArea(player, domino) {
                 this.layout.push({
-                    "name":name,
+                    "name":player.name,
                     "x":0,
                     "y":0,
                     "w":1,
                     "h":2,
                     "i":domino
                 });
+
+                this.removeUsedDominoFromSelection(domino);
             },
-            rotateLeft() {
-                this.rotation += 90
+            removeUsedDominoFromSelection(domino) {
+                for (let i = 0; i < this.players.length; i++) {
+                    let index = this.players[i].dominoes.indexOf(domino);
+                    if (index !== -1) this.players[i].dominoes.splice(index, 1);
+                }
+            },
+            rotateLeft(number) {
+                if (this.currentRotationPosition > 270) {
+                    this.currentRotationPosition = 0;
+                }
+
+                document.getElementById("rotateDomino" + number)
+                    .style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) +'deg)';
             },
             fetchPlayers() {
                 axios.get('players')
@@ -85,3 +98,7 @@
         },
     }
 </script>
+
+<style>
+    #rotateDomino {}
+</style>

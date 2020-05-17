@@ -17,7 +17,7 @@ class PlayersController extends Controller
      */
     public function index()
     {
-        return new PlayersCollection(Player::with('dominoes')->get());
+        return new PlayersCollection(Player::all());
     }
 
     /**

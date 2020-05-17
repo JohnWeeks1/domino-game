@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53c9c968-25a6-4656-bfae-e9c6d2c487ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersByLoggedInUserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PlayersController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/PlayersCollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/PlayersCollection.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/GameComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/GameComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/PlayerListComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/PlayerListComponent.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,6 +182,7 @@
       <updated>1589299380606</updated>
       <workItem from="1589299383366" duration="75007000" />
       <workItem from="1589567365352" duration="11741000" />
+      <workItem from="1589621301475" duration="14537000" />
     </task>
     <servers />
   </component>
@@ -196,18 +198,22 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="260" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1589299476305" />
-    <state x="260" y="313" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1589575819695">
+    <state x="260" y="313" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1589641360591">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="260" y="313" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1589575819695" />
+    <state x="260" y="313" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1589641360591" />
+    <state x="183" y="213" key="#phpunit.xml" timestamp="1589641587415">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="183" y="213" key="#phpunit.xml/0.23.1920.1057@0.23.1920.1057" timestamp="1589641587415" />
     <state width="500" height="445" key="SwitcherDM" timestamp="1589327182320">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state width="500" height="445" key="SwitcherDM/0.23.1920.1057@0.23.1920.1057" timestamp="1589327182320" />
-    <state x="190" y="384" key="com.intellij.ide.util.TipDialog" timestamp="1589567365911">
+    <state x="190" y="384" key="com.intellij.ide.util.TipDialog" timestamp="1589621307625">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="190" y="384" key="com.intellij.ide.util.TipDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1589567365911" />
+    <state x="190" y="384" key="com.intellij.ide.util.TipDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1589621307625" />
     <state x="131" y="276" width="782" height="710" key="find.popup" timestamp="1589582984774">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>

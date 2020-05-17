@@ -2,11 +2,13 @@
     <div class="container">
         <h3>Let's do this!</h3>
         <p>Click on the button and select 7 Dominoes</p>
-        <router-link
-                     :to="{ name: 'game' }"
-                     class="btn btn-primary btn-sm float-right">
-            Select dominoes
-        </router-link>
+<!--        <div>-->
+<!--            <router-link-->
+<!--                :to="{ name: 'game' }"-->
+<!--                class="btn btn-primary btn-sm float-right">-->
+<!--                Select dominoes-->
+<!--            </router-link>-->
+<!--        </div>-->
         <hr>
         <div class="row">
             <div class="col-md-12">
