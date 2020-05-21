@@ -1,6 +1,13 @@
 <template>
     <div>
         <div class="container">
+            current {{currentPlayerDomino}}
+            <br>
+            <br>
+            layout {{layout}}
+            <br>
+            <br>
+            players {{players}}
             <div class="jumbotron">
                 <div v-for="player in players" :key="players.id">
                     {{player.name}}
@@ -62,19 +69,6 @@
         },
         methods: {
             /**
-             * Get all players.
-             */
-            fetchPlayers() {
-                axios.get('players')
-                    .then(response => {
-                        this.players = response.data.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
-
-            /**
              * Get the info for the selected domino and add it
              * to the currentPlayerDomino object and the layout array.
              *
@@ -106,7 +100,6 @@
 
                 this.removeSelectedDominoFromSelectionArea(domino);
             },
-
             /**
              * Get the last object in the layout array and make it static.
              * Then clear currentPlayerDomino.
@@ -142,7 +135,6 @@
                     this.getLastInLayout.static = true;
                 }
             },
-
             /**
              * When selected domino is double clicked remove from the selection area.
              *
@@ -154,7 +146,6 @@
                     if (index !== -1) this.players[i].dominoes.splice(index, 1);
                 }
             },
-
             /**
              * Rotate domino left by 90 degrees.
              *
@@ -200,7 +191,16 @@
                         }
                     }
                 }
-            }
+            },
+            fetchPlayers() {
+                axios.get('players')
+                    .then(response => {
+                        this.players = response.data.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
         },
         computed: {
             getLastInLayout() {

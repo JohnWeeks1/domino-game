@@ -2048,6 +2048,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'game',
@@ -2056,7 +2067,7 @@ __webpack_require__.r(__webpack_exports__);
       players: [],
       playersRow: 0,
       layout: [],
-      currentNameAndDomino: [],
+      currentPlayerDomino: {},
       rotateAngle: 90,
       currentRotationPosition: 0
     };
@@ -2065,24 +2076,87 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchPlayers();
   },
   methods: {
+    /**
+     * Get the info for the selected domino and add it
+     * to the currentPlayerDomino object and the layout array.
+     *
+     * @param player
+     * @param domino
+     */
     addDominoToGameArea: function addDominoToGameArea(player, domino) {
-      this.currentNameAndDomino = [player.name, domino];
+      this.currentPlayerDomino = {
+        name: player.name,
+        x: null,
+        y: null,
+        w: null,
+        h: null,
+        i: domino,
+        "static": false
+      };
       this.layout.push({
         "name": player.name,
         "x": 0,
         "y": 0,
         "w": 1,
         "h": 2,
-        "i": domino
+        "i": domino,
+        "static": false
       });
-      this.removeUsedDominoFromSelection(domino);
+      this.firstDominoStartingPosition();
+      this.removeSelectedDominoFromSelectionArea(domino);
     },
-    removeUsedDominoFromSelection: function removeUsedDominoFromSelection(domino) {
+
+    /**
+     * Get the last object in the layout array and make it static.
+     * Then clear currentPlayerDomino.
+     */
+    addDominoToLayout: function addDominoToLayout() {
+      this.getLastInLayout["static"] = true;
+      this.currentPlayerDomino = {};
+    },
+
+    /**
+     * Remove current domino from game area and put back in the players selection
+     */
+    removeCurrentSelectedDominoFromGameArea: function removeCurrentSelectedDominoFromGameArea() {
+      for (var i = 0; i < this.players.length; i++) {
+        if (this.players[i].name === this.currentPlayerDomino.name) {
+          this.players[i].dominoes.push(this.currentPlayerDomino.i);
+        }
+      }
+
+      this.layout.pop();
+      this.currentPlayerDomino = {};
+    },
+
+    /**
+     * First selected domino is forced to this area of the grid.
+     */
+    firstDominoStartingPosition: function firstDominoStartingPosition() {
+      if (this.layout.length === 1) {
+        this.getLastInLayout.x = 8;
+        this.getLastInLayout.y = 4;
+        this.getLastInLayout["static"] = true;
+      }
+    },
+
+    /**
+     * When selected domino is double clicked remove from the selection area.
+     *
+     * @param domino
+     */
+    removeSelectedDominoFromSelectionArea: function removeSelectedDominoFromSelectionArea(domino) {
       for (var i = 0; i < this.players.length; i++) {
         var index = this.players[i].dominoes.indexOf(domino);
         if (index !== -1) this.players[i].dominoes.splice(index, 1);
       }
     },
+
+    /**
+     * Rotate domino left by 90 degrees.
+     *
+     * @param number
+     */
     rotateLeft: function rotateLeft(number) {
       if (this.currentRotationPosition > 270) {
         this.currentRotationPosition = 0;
@@ -2094,7 +2168,7 @@ __webpack_require__.r(__webpack_exports__);
       for (var i = 0; i < this.layout.length; i++) {
         var layout = this.layout[i];
 
-        if (layout.name === this.currentNameAndDomino[0] && layout.i === this.currentNameAndDomino[1]) {
+        if (layout.name === this.currentPlayerDomino.name && layout.i === this.currentPlayerDomino.i) {
           if (this.currentRotationPosition === 90) {
             dominoBeingClicked.classList.add('moveDominoToCorrectArea');
             layout.h = 1;
@@ -2129,6 +2203,11 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    }
+  },
+  computed: {
+    getLastInLayout: function getLastInLayout() {
+      return this.layout.slice(-1)[0];
     }
   },
   components: {
@@ -55774,6 +55853,17 @@ var render = function() {
     "div",
     [
       _c("div", { staticClass: "container" }, [
+        _vm._v(
+          "\n        current " + _vm._s(_vm.currentPlayerDomino) + "\n        "
+        ),
+        _c("br"),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v("\n        layout " + _vm._s(_vm.layout) + "\n        "),
+        _c("br"),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v("\n        players " + _vm._s(_vm.players) + "\n        "),
         _c(
           "div",
           { staticClass: "jumbotron" },
@@ -55810,7 +55900,31 @@ var render = function() {
                       ]
                     )
                   ])
-                })
+                }),
+                _vm._v(" "),
+                _vm.currentPlayerDomino.name
+                  ? _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-success",
+                          on: { click: _vm.addDominoToLayout }
+                        },
+                        [_vm._v("Apply")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-danger",
+                          on: {
+                            click: _vm.removeCurrentSelectedDominoFromGameArea
+                          }
+                        },
+                        [_vm._v("Re-pick")]
+                      )
+                    ])
+                  : _vm._e()
               ],
               2
             )
