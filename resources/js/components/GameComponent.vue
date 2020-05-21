@@ -1,14 +1,10 @@
 <template>
     <div>
         <div class="container">
-            current {{currentPlayerDomino}}
-            <br>
-            <br>
-            layout {{layout}}
-            <br>
-            <br>
-            players {{players}}
             <div class="jumbotron">
+                <div v-if="error !== null" class="alert alert-danger">
+                    {{error}}
+                </div>
                 <div v-for="player in players" :key="players.id">
                     {{player.name}}
                     <span v-for="domino in player.dominoes">
@@ -59,6 +55,7 @@
                 players: [],
                 playersRow: 0,
                 layout: [],
+                error: null,
                 currentPlayerDomino: {},
                 rotateAngle: 90,
                 currentRotationPosition: 0
@@ -76,6 +73,9 @@
              * @param domino
              */
             addDominoToGameArea(player, domino) {
+                if (this.currentPlayerDomino.name) {
+                    return this.error = 'You can\t select more than 1 domino at a time.';
+                }
                 this.currentPlayerDomino = {
                     name: player.name,
                     x: null,

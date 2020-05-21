@@ -2055,10 +2055,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'game',
@@ -2067,6 +2063,7 @@ __webpack_require__.r(__webpack_exports__);
       players: [],
       playersRow: 0,
       layout: [],
+      error: null,
       currentPlayerDomino: {},
       rotateAngle: 90,
       currentRotationPosition: 0
@@ -2084,6 +2081,10 @@ __webpack_require__.r(__webpack_exports__);
      * @param domino
      */
     addDominoToGameArea: function addDominoToGameArea(player, domino) {
+      if (this.currentPlayerDomino.name) {
+        return this.error = 'You can\t select more than 1 domino at a time.';
+      }
+
       this.currentPlayerDomino = {
         name: player.name,
         x: null,
@@ -55853,83 +55854,82 @@ var render = function() {
     "div",
     [
       _c("div", { staticClass: "container" }, [
-        _vm._v(
-          "\n        current " + _vm._s(_vm.currentPlayerDomino) + "\n        "
-        ),
-        _c("br"),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v("\n        layout " + _vm._s(_vm.layout) + "\n        "),
-        _c("br"),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v("\n        players " + _vm._s(_vm.players) + "\n        "),
         _c(
           "div",
           { staticClass: "jumbotron" },
-          _vm._l(_vm.players, function(player) {
-            return _c(
-              "div",
-              { key: _vm.players.id },
-              [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(player.name) +
-                    "\n                "
-                ),
-                _vm._l(player.dominoes, function(domino) {
-                  return _c("span", [
-                    _c(
-                      "span",
-                      {
-                        on: {
-                          dblclick: function($event) {
-                            return _vm.addDominoToGameArea(player, domino)
-                          }
-                        }
-                      },
-                      [
-                        _c("img", {
-                          staticClass: "p-1",
-                          attrs: {
-                            src: "../../images/dominoes/" + domino + ".png",
-                            width: "40",
-                            alt: ""
-                          }
-                        })
-                      ]
-                    )
-                  ])
-                }),
-                _vm._v(" "),
-                _vm.currentPlayerDomino.name
-                  ? _c("span", [
+          [
+            _vm.error !== null
+              ? _c("div", { staticClass: "alert alert-danger" }, [
+                  _vm._v(
+                    "\n                " + _vm._s(_vm.error) + "\n            "
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.players, function(player) {
+              return _c(
+                "div",
+                { key: _vm.players.id },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(player.name) +
+                      "\n                "
+                  ),
+                  _vm._l(player.dominoes, function(domino) {
+                    return _c("span", [
                       _c(
-                        "button",
+                        "span",
                         {
-                          staticClass: "btn btn-sm btn-success",
-                          on: { click: _vm.addDominoToLayout }
-                        },
-                        [_vm._v("Apply")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-danger",
                           on: {
-                            click: _vm.removeCurrentSelectedDominoFromGameArea
+                            dblclick: function($event) {
+                              return _vm.addDominoToGameArea(player, domino)
+                            }
                           }
                         },
-                        [_vm._v("Re-pick")]
+                        [
+                          _c("img", {
+                            staticClass: "p-1",
+                            attrs: {
+                              src: "../../images/dominoes/" + domino + ".png",
+                              width: "40",
+                              alt: ""
+                            }
+                          })
+                        ]
                       )
                     ])
-                  : _vm._e()
-              ],
-              2
-            )
-          }),
-          0
+                  }),
+                  _vm._v(" "),
+                  _vm.currentPlayerDomino.name
+                    ? _c("span", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-success",
+                            on: { click: _vm.addDominoToLayout }
+                          },
+                          [_vm._v("Apply")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            on: {
+                              click: _vm.removeCurrentSelectedDominoFromGameArea
+                            }
+                          },
+                          [_vm._v("Re-pick")]
+                        )
+                      ])
+                    : _vm._e()
+                ],
+                2
+              )
+            })
+          ],
+          2
         )
       ]),
       _vm._v(" "),
