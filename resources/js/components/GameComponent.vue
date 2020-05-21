@@ -9,6 +9,10 @@
                             <img class="p-1" :src="`../../images/dominoes/${domino}.png`" width=40 alt="">
                         </span>
                     </span>
+                    <span v-if="currentPlayerDomino.name">
+                        <button class="btn btn-sm btn-success" @click="addDominoToLayout">Apply</button>
+                        <button class="btn btn-sm btn-danger" @click="removeCurrentSelectedDominoFromGameArea">Re-pick</button>
+                    </span>
                 </div>
             </div>
         </div>
@@ -48,7 +52,7 @@
                 players: [],
                 playersRow: 0,
                 layout: [],
-                currentNameAndDomino: [],
+                currentPlayerDomino: {},
                 rotateAngle: 90,
                 currentRotationPosition: 0
             }
@@ -57,25 +61,105 @@
             this.fetchPlayers();
         },
         methods: {
+            /**
+             * Get all players.
+             */
+            fetchPlayers() {
+                axios.get('players')
+                    .then(response => {
+                        this.players = response.data.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+
+            /**
+             * Get the info for the selected domino and add it
+             * to the currentPlayerDomino object and the layout array.
+             *
+             * @param player
+             * @param domino
+             */
             addDominoToGameArea(player, domino) {
-                this.currentNameAndDomino = [player.name, domino];
+                this.currentPlayerDomino = {
+                    name: player.name,
+                    x: null,
+                    y: null,
+                    w: null,
+                    h: null,
+                    i: domino,
+                    static: false
+                };
+
                 this.layout.push({
                     "name":player.name,
                     "x":0,
                     "y":0,
                     "w":1,
                     "h":2,
-                    "i":domino
+                    "i":domino,
+                    "static":false
                 });
 
-                this.removeUsedDominoFromSelection(domino);
+                this.firstDominoStartingPosition();
+
+                this.removeSelectedDominoFromSelectionArea(domino);
             },
-            removeUsedDominoFromSelection(domino) {
+
+            /**
+             * Get the last object in the layout array and make it static.
+             * Then clear currentPlayerDomino.
+             */
+            addDominoToLayout() {
+                this.getLastInLayout.static = true;
+                this.currentPlayerDomino = {};
+            },
+
+            /**
+             * Remove current domino from game area and put back in the players selection
+             */
+            removeCurrentSelectedDominoFromGameArea() {
+                for (let i = 0; i < this.players.length; i++) {
+                    if (this.players[i].name === this.currentPlayerDomino.name) {
+                        this.players[i].dominoes.push(
+                            this.currentPlayerDomino.i
+                        )
+                    }
+                }
+
+                this.layout.pop();
+                this.currentPlayerDomino = {};
+            },
+
+            /**
+             * First selected domino is forced to this area of the grid.
+             */
+            firstDominoStartingPosition() {
+                if (this.layout.length === 1) {
+                    this.getLastInLayout.x = 8;
+                    this.getLastInLayout.y = 4;
+                    this.getLastInLayout.static = true;
+                }
+            },
+
+            /**
+             * When selected domino is double clicked remove from the selection area.
+             *
+             * @param domino
+             */
+            removeSelectedDominoFromSelectionArea(domino) {
                 for (let i = 0; i < this.players.length; i++) {
                     let index = this.players[i].dominoes.indexOf(domino);
                     if (index !== -1) this.players[i].dominoes.splice(index, 1);
                 }
             },
+
+            /**
+             * Rotate domino left by 90 degrees.
+             *
+             * @param number
+             */
             rotateLeft(number) {
                 if (this.currentRotationPosition > 270) {
                     this.currentRotationPosition = 0;
@@ -83,18 +167,18 @@
                 let dominoBeingClicked = document.getElementById("rotateDomino" + number)
 
                 dominoBeingClicked.style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) +'deg)';
-                
+
                 for (let i = 0; i < this.layout.length; i++) {
                     let layout = this.layout[i];
-                    
+
                     if (
-                        layout.name === this.currentNameAndDomino[0] &&
-                        layout.i === this.currentNameAndDomino[1]
+                        layout.name === this.currentPlayerDomino.name &&
+                        layout.i === this.currentPlayerDomino.i
                     ) {
                         if (this.currentRotationPosition === 90) {
                             dominoBeingClicked.classList.add('moveDominoToCorrectArea');
                             layout.h = 1;
-                            layout.w = 2; 
+                            layout.w = 2;
                         }
 
                         if (this.currentRotationPosition === 180) {
@@ -106,7 +190,7 @@
                         if (this.currentRotationPosition === 270) {
                             dominoBeingClicked.classList.add('moveDominoToCorrectArea');
                             layout.h = 1;
-                            layout.w = 2; 
+                            layout.w = 2;
                         }
 
                         if (this.currentRotationPosition === 360) {
@@ -116,16 +200,12 @@
                         }
                     }
                 }
-            },
-            fetchPlayers() {
-                axios.get('players')
-                    .then(response => {
-                        this.players = response.data.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
+            }
+        },
+        computed: {
+            getLastInLayout() {
+                return this.layout.slice(-1)[0];
+            }
         },
         components: {
             GridLayout: VueGridLayout.GridLayout,
