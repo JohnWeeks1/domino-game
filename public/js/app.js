@@ -2114,6 +2114,7 @@ __webpack_require__.r(__webpack_exports__);
     addDominoToLayout: function addDominoToLayout() {
       this.getLastInLayout["static"] = true;
       this.currentPlayerDomino = {};
+      this.error = null;
     },
 
     /**

@@ -107,6 +107,7 @@
             addDominoToLayout() {
                 this.getLastInLayout.static = true;
                 this.currentPlayerDomino = {};
+                this.error = null;
             },
 
             /**
