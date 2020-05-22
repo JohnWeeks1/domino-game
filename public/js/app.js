@@ -2055,6 +2055,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'game',
@@ -2066,6 +2068,7 @@ __webpack_require__.r(__webpack_exports__);
       error: null,
       currentPlayerDomino: {},
       rotateAngle: 90,
+      rotation: 0,
       currentRotationPosition: 0
     };
   },
@@ -2073,6 +2076,19 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchPlayers();
   },
   methods: {
+    /**
+     * Fetch all players in game.
+     */
+    fetchPlayers: function fetchPlayers() {
+      var _this = this;
+
+      axios.get('players').then(function (response) {
+        _this.players = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+
     /**
      * Get the info for the selected domino and add it
      * to the currentPlayerDomino object and the layout array.
@@ -2087,12 +2103,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.currentPlayerDomino = {
         name: player.name,
-        x: null,
-        y: null,
-        w: null,
-        h: null,
-        i: domino,
-        "static": false
+        i: domino
       };
       this.layout.push({
         "name": player.name,
@@ -2100,6 +2111,7 @@ __webpack_require__.r(__webpack_exports__);
         "y": 0,
         "w": 1,
         "h": 2,
+        "r": 0,
         "i": domino,
         "static": false
       });
@@ -2112,6 +2124,7 @@ __webpack_require__.r(__webpack_exports__);
      * Then clear currentPlayerDomino.
      */
     addDominoToLayout: function addDominoToLayout() {
+      this.calculateCurrentDominoPositionOnBoard();
       this.getLastInLayout["static"] = true;
       this.currentPlayerDomino = {};
       this.error = null;
@@ -2129,6 +2142,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.layout.pop();
       this.currentPlayerDomino = {};
+      this.error = null;
     },
 
     /**
@@ -2138,6 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.layout.length === 1) {
         this.getLastInLayout.x = 8;
         this.getLastInLayout.y = 4;
+        this.getLastInLayout.r = 0;
         this.getLastInLayout["static"] = true;
       }
     },
@@ -2155,11 +2170,15 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * Rotate domino left by 90 degrees.
+     * Rotate domino right by 90 degrees.
      *
      * @param number
      */
-    rotateLeft: function rotateLeft(number) {
+    rotateRight: function rotateRight(number) {
+      if (this.layout.length === 1) {
+        return null;
+      }
+
       if (this.currentRotationPosition > 270) {
         this.currentRotationPosition = 0;
       }
@@ -2197,14 +2216,41 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    fetchPlayers: function fetchPlayers() {
-      var _this = this;
+    calculateRotationAndGridForCurrentDomino: function calculateRotationAndGridForCurrentDomino(currentRotation) {
+      var xAxis = this.getLastInLayout.x;
+      var yAxis = this.getLastInLayout.y;
+      var width = this.getLastInLayout.w;
+      var dominoNumbers = this.getLastInLayout.i;
 
-      axios.get('players').then(function (response) {
-        _this.players = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      if (currentRotation === 0) {
+        return [xAxis + 1, xAxis - 1, yAxis - 2, yAxis + 1, dominoNumbers, currentRotation];
+      }
+    },
+    calculateRestOfLayout: function calculateRestOfLayout(currentRotation, layout) {
+      var xAxis = layout.x;
+      var yAxis = layout.y;
+
+      if (currentRotation === 0) {
+        return [xAxis, xAxis, yAxis, yAxis - 1];
+      }
+    },
+    calculateCurrentDominoPositionOnBoard: function calculateCurrentDominoPositionOnBoard() {
+      if (this.layout.length < 2) {
+        return null;
+      }
+
+      var info = this.calculateRotationAndGridForCurrentDomino(0);
+      this.calculateMatchingDomino(info);
+    },
+    calculateMatchingDomino: function calculateMatchingDomino(info) {
+      for (var i = 0; i < this.layout.length; i++) {
+        var layout = this.calculateRestOfLayout(info[5], this.layout[i]);
+
+        if (info[0] === layout[0] || info[1] === layout[1] || info[2] === layout[2] || info[3] === layout[3]) {
+          console.log(this.layout[i].i);
+          console.log(info[4]);
+        }
+      }
     }
   },
   computed: {
@@ -55854,6 +55900,13 @@ var render = function() {
   return _c(
     "div",
     [
+      _vm._v(
+        "\n    " +
+          _vm._s(_vm.currentPlayerDomino) +
+          "\n    " +
+          _vm._s(_vm.layout) +
+          "\n    "
+      ),
       _c("div", { staticClass: "container" }, [
         _c(
           "div",
@@ -55972,7 +56025,7 @@ var render = function() {
                 },
                 on: {
                   dblclick: function($event) {
-                    return _vm.rotateLeft(item.i)
+                    return _vm.rotateRight(item.i)
                   }
                 }
               })

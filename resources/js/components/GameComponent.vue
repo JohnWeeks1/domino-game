@@ -1,5 +1,7 @@
 <template>
     <div>
+        {{currentPlayerDomino}}
+        {{layout}}
         <div class="container">
             <div class="jumbotron">
                 <div v-if="error !== null" class="alert alert-danger">
@@ -39,7 +41,7 @@
                        :h="item.h"
                        :i="item.i"
                        :key="item.i">
-                    <img height="95px" @dblclick="rotateLeft(item.i)" :id="`rotateDomino${item.i}`" :src="`images/dominoes/${item.i}.png`"  alt="">
+                    <img height="95px" @dblclick="rotateRight(item.i)" :id="`rotateDomino${item.i}`" :src="`images/dominoes/${item.i}.png`"  alt="">
             </grid-item>
         </grid-layout>
     </div>
@@ -58,6 +60,7 @@
                 error: null,
                 currentPlayerDomino: {},
                 rotateAngle: 90,
+                rotation: 0,
                 currentRotationPosition: 0
             }
         },
@@ -65,6 +68,18 @@
             this.fetchPlayers();
         },
         methods: {
+            /**
+             * Fetch all players in game.
+             */
+            fetchPlayers() {
+                axios.get('players')
+                    .then(response => {
+                        this.players = response.data.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
             /**
              * Get the info for the selected domino and add it
              * to the currentPlayerDomino object and the layout array.
@@ -78,12 +93,7 @@
                 }
                 this.currentPlayerDomino = {
                     name: player.name,
-                    x: null,
-                    y: null,
-                    w: null,
-                    h: null,
-                    i: domino,
-                    static: false
+                    i: domino
                 };
 
                 this.layout.push({
@@ -92,6 +102,7 @@
                     "y":0,
                     "w":1,
                     "h":2,
+                    "r":0,
                     "i":domino,
                     "static":false
                 });
@@ -105,6 +116,7 @@
              * Then clear currentPlayerDomino.
              */
             addDominoToLayout() {
+                this.calculateCurrentDominoPositionOnBoard();
                 this.getLastInLayout.static = true;
                 this.currentPlayerDomino = {};
                 this.error = null;
@@ -124,6 +136,7 @@
 
                 this.layout.pop();
                 this.currentPlayerDomino = {};
+                this.error = null;
             },
 
             /**
@@ -133,6 +146,7 @@
                 if (this.layout.length === 1) {
                     this.getLastInLayout.x = 8;
                     this.getLastInLayout.y = 4;
+                    this.getLastInLayout.r = 0;
                     this.getLastInLayout.static = true;
                 }
             },
@@ -148,14 +162,19 @@
                 }
             },
             /**
-             * Rotate domino left by 90 degrees.
+             * Rotate domino right by 90 degrees.
              *
              * @param number
              */
-            rotateLeft(number) {
+            rotateRight(number) {
+                if (this.layout.length === 1) {
+                    return null;
+                }
+
                 if (this.currentRotationPosition > 270) {
                     this.currentRotationPosition = 0;
                 }
+
                 let dominoBeingClicked = document.getElementById("rotateDomino" + number)
 
                 dominoBeingClicked.style.transform = 'rotate(' + (this.currentRotationPosition += this.rotateAngle) +'deg)';
@@ -193,15 +212,65 @@
                     }
                 }
             },
-            fetchPlayers() {
-                axios.get('players')
-                    .then(response => {
-                        this.players = response.data.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
+            calculateRotationAndGridForCurrentDomino(currentRotation) {
+
+                let xAxis = this.getLastInLayout.x;
+                let yAxis = this.getLastInLayout.y;
+                let width = this.getLastInLayout.w;
+                let dominoNumbers = this.getLastInLayout.i;
+
+                if (currentRotation === 0) {
+                    return [
+                        (xAxis + 1),
+                        (xAxis - 1),
+                        (yAxis - 2),
+                        (yAxis + 1),
+                        dominoNumbers,
+                        currentRotation
+                    ];
+                }
             },
+            calculateRestOfLayout(currentRotation, layout) {
+
+                let xAxis = layout.x;
+                let yAxis = layout.y;
+
+                if (currentRotation === 0) {
+                    return [
+                        xAxis,
+                        xAxis,
+                        yAxis,
+                        (yAxis - 1)
+                    ];
+                }
+            },
+            calculateCurrentDominoPositionOnBoard() {
+                if (this.layout.length < 2) {
+                    return null;
+                }
+
+                let info = this.calculateRotationAndGridForCurrentDomino(0);
+
+                this.calculateMatchingDomino(info);
+            },
+            calculateMatchingDomino(info) {
+                for (let i = 0; i < this.layout.length; i++) {
+
+                    let layout = this.calculateRestOfLayout(info[5], this.layout[i]);
+
+                    if (
+                        (
+                            info[0] === layout[0] ||
+                            info[1] === layout[1] ||
+                            info[2] === layout[2] ||
+                            info[3] === layout[3]
+                        )
+                    ) {
+                        console.log(this.layout[i].i)
+                        console.log(info[4])
+                    }
+                }
+            }
         },
         computed: {
             getLastInLayout() {
