@@ -2223,7 +2223,18 @@ __webpack_require__.r(__webpack_exports__);
       var dominoNumbers = this.getLastInLayout.i;
 
       if (currentRotation === 0) {
-        return [xAxis + 1, xAxis - 1, yAxis - 2, yAxis + 1, dominoNumbers, currentRotation];
+        return {
+          "x": xAxis,
+          "y": yAxis,
+          "x+1": xAxis + 1,
+          "x-1": xAxis - 1,
+          "y-1": yAxis - 1,
+          "y-2": yAxis - 2,
+          "y+2": yAxis + 2,
+          "y+1": yAxis + 1,
+          "i": dominoNumbers,
+          "r": currentRotation
+        };
       }
     },
     calculateRestOfLayout: function calculateRestOfLayout(currentRotation, layout) {
@@ -2231,9 +2242,18 @@ __webpack_require__.r(__webpack_exports__);
       var yAxis = layout.y;
 
       if (currentRotation === 0) {
-        return [xAxis, xAxis, yAxis, yAxis - 1];
+        return {
+          "x": xAxis,
+          "y": yAxis
+        };
       }
     },
+
+    /**
+     * First function to calculate domino positions on board.
+     *
+     * @returns {null}
+     */
     calculateCurrentDominoPositionOnBoard: function calculateCurrentDominoPositionOnBoard() {
       if (this.layout.length < 2) {
         return null;
@@ -2243,13 +2263,44 @@ __webpack_require__.r(__webpack_exports__);
       this.calculateMatchingDomino(info);
     },
     calculateMatchingDomino: function calculateMatchingDomino(info) {
-      for (var i = 0; i < this.layout.length; i++) {
-        var layout = this.calculateRestOfLayout(info[5], this.layout[i]);
+      for (var i = 0; i < this.layout.length - 1; i++) {
+        var layout = this.calculateRestOfLayout(info['r'], this.layout[i]);
+        console.log(layout['x'] && layout['y']);
+        console.log(info['x-1'] && info['y-1']);
 
-        if (info[0] === layout[0] || info[1] === layout[1] || info[2] === layout[2] || info[3] === layout[3]) {
-          console.log(this.layout[i].i);
-          console.log(info[4]);
+        if ((info['x+1'] && info['y']) === (layout['x'] && layout['y'])) {
+          console.log('1');
         }
+
+        if ((info['x-1'] && info['y']) === (layout['x'] && layout['y'])) {
+          console.log('2');
+        }
+
+        if (info['y+2'] === layout['y'] === (layout['x'] && layout['y'])) {
+          console.log('3');
+        }
+
+        if (info['y-2'] === layout['y'] === (layout['x'] && layout['y'])) {
+          console.log('4');
+        }
+
+        if ((info['x+1'] && info['y+1']) === (layout['x'] && layout['y'])) {
+          console.log('5');
+        }
+
+        if ((info['x-1'] && info['y+1']) === (layout['x'] && layout['y'])) {
+          console.log('6');
+        }
+
+        if ((info['x+1'] && info['y-1']) === (layout['x'] && layout['y'])) {
+          console.log('7');
+        }
+
+        if ((info['x-1'] && info['y-1']) === (layout['x'] && layout['y'])) {
+          console.log('8');
+        }
+
+        stop();
       }
     }
   },
